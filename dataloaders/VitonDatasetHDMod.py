@@ -9,79 +9,79 @@ import torch
 from torch.utils.data import Dataset
 from torchvision import transforms
 
+# Seems to be derived from LIP Challenge Data 
 semantic_cloth_labels = [
-    [128, 0, 128],
-    [128, 128, 64],
-    [128, 128, 192],
-    [0, 255, 0],
-    [0, 128, 128], # dress
-    [128, 128, 128], # something upper?
-    
-    [0, 0, 0], # bg
-    
-    [0, 128, 0], # hair
-    [0, 64, 0], # left leg?
-    [128, 128, 0], # right hand
-    [0, 192, 0], # left foot
-    [128, 0, 192], # head
-    [0, 0, 192], # legs / skirt?
-    [0, 64, 128], # skirt?
-    [128, 0, 64], # left hand
-    [0, 192, 128], # right foot
-    [0, 0, 128],
-    [0, 128, 64],
-    [0, 0, 64],
-    [0, 128, 192]
+    [128, 0, 128],      #0 Torso/Top/Clothing
+    [128, 128, 64],     #1 Left arm
+    [128, 128, 192],    #2 Right arm
+    [0, 255, 0],        #3 Neck
+    [0, 128, 128],      #4 Dress
+    [128, 128, 128],    #5 Something upper?
+    [0, 0, 0],          #6 Background
+    [0, 128, 0],        #7 Hair
+    [0, 64, 0],         #8 Left leg?
+    [128, 128, 0],      #9 Right hand
+    [0, 192, 0],        #10 Left foot
+    [128, 0, 192],      #11 Head
+    [0, 0, 192],        #12 Legs / skirt?
+    [0, 64, 128],       #13 Skirt?
+    [128, 0, 64],       #14 Left hand
+    [0, 192, 128],      #15 Right foot
+    [0, 0, 128],        #16 ????
+    [0, 128, 64],       #17 ????
+    [0, 0, 64],         #18 ????
+    [0, 128, 192]       #19 ????
 ]
 
+# DensePose-COCO? 
 semantic_densepose_labels = [
-    [0, 0, 0],
-	[105, 105, 105],
-	[85, 107, 47],
-	[139, 69, 19],
-	[72, 61, 139],
-	[0, 128, 0],
-	[154, 205, 50],
-	[0, 0, 139],
-	[255, 69, 0],
-	[255, 165, 0],
-	[255, 255, 0],
-	[0, 255, 0],
-	[186, 85, 211],
-	[0, 255, 127],
-	[220, 20, 60],
-	[0, 191, 255],
-	[0, 0, 255],
-	[216, 191, 216],
-	[255, 0, 255],
-	[30, 144, 255],
-	[219, 112, 147],
-	[240, 230, 140],
-	[255, 20, 147],
-	[255, 160, 122],
-	[127, 255, 212]
+    [0, 0, 0],          #0 Background
+	[105, 105, 105],    #1 Torso 1 (Rear?)
+	[85, 107, 47],      #2 Torso 2 (Front?)
+	[139, 69, 19],      #3 Right Hand
+	[72, 61, 139],      #4 Left Hand
+	[0, 128, 0],        #5 Left Foot
+	[154, 205, 50],     #6 Right Foot
+	[0, 0, 139],        #7 Right Leg Upper
+	[255, 69, 0],       #8 Left Leg Upper
+	[255, 165, 0],      #9 Right leg Upper
+	[255, 255, 0],      #10 Left leg Upper
+	[0, 255, 0],        #11 Right leg Lower
+	[186, 85, 211],     #12 Left Leg Lower
+	[0, 255, 127],      #13 Right leg Lower
+	[220, 20, 60],      #14 Left Leg Lower
+	[0, 191, 255],      #15 Left Arm - Upper inner
+	[0, 0, 255],        #16 Right Arm - Upper inner
+	[216, 191, 216],    #17 Left Arm - Upper outer
+	[255, 0, 255],      #18 Right Arm - Upper outer
+	[30, 144, 255],     #19 Left Arm - Lower inner
+	[219, 112, 147],    #20 Right arm - Lower inner
+	[240, 230, 140],    #21 Left Arm - Lower outer 
+	[255, 20, 147],     #22 Right Arm - Lower outer
+	[255, 160, 122],    #23 Right face
+	[127, 255, 212]     #24 Left Face
 ]
 
+# Unknown providence?
 semantic_body_labels = [
-    [127, 127, 127],
-    [0, 255, 255],
-    [255, 255, 0],
-    [127, 127, 0],
-    [255, 127, 127],
-    [0, 255, 0],
-    [0, 0, 0],
-    [255, 127, 0],
-    [0, 0, 255],
-    [127, 255, 127],
-    [0, 127, 255],
-    [127, 0, 255],
-    [255, 255, 127],
-    [255, 0, 0],
-    [255, 0, 255]
+    [127, 127, 127],    #0 Head
+    [0, 255, 255],      #1 Left hand
+    [255, 255, 0],      #2 Left Arm - Upper
+    [127, 127, 0],      #3 Right hand
+    [255, 127, 127],    #4 ????
+    [0, 255, 0],        #5 Left leg
+    [0, 0, 0],          #6 Background
+    [255, 127, 0],      #7 Right Arm - Upper
+    [0, 0, 255],        #8 Right Leg
+    [127, 255, 127],    #9 ????
+    [0, 127, 255],      #10 ????
+    [127, 0, 255],      #11 Right Arm - Lower
+    [255, 255, 127],    #12 ????
+    [255, 0, 0],        #13 Torso
+    [255, 0, 255]       #14 Left Arm Lower
 ]
 
-
-class VitonDataset(Dataset):
+class VitonDatasetHDMod(Dataset):
     
     def __init__(self, opt, phase, test_pairs=None):
 
@@ -97,6 +97,7 @@ class VitonDataset(Dataset):
                 opt.offsets.append(0)
         
         if isinstance(opt.img_size, int):
+            #Aspect ratio of 'opt.image' is 0.75
             opt.img_size = (opt.img_size, int(opt.img_size * 0.75))
         
         self.opt = opt
@@ -122,7 +123,7 @@ class VitonDataset(Dataset):
         ])
         
         if phase in {"train", "train_whole"} and self.opt.add_pd_loss:
-            self.hand_indices = [2, 7, 11, 14]
+            self.hand_indices = [2, 7, 11, 14] #These seem to relate to the arm components in 'semantic_body_labels' (but not hands?)
             self.body_label_centroids = [None] * len(self.filepath_df)
         else:
             self.body_label_centroids = None
@@ -282,4 +283,4 @@ class VitonDataset(Dataset):
         return len(self.filepath_df)
     
     def name(self):
-        return "VitonDataset"
+        return "VitonDatasetHDMod"

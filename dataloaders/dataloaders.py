@@ -4,13 +4,15 @@ import torch
 
 from dataloaders.MPVDataset import MPVDataset
 from dataloaders.VitonDataset import VitonDataset
-
+from dataloaders.VitonDatasetHDMod import VitonDatasetHDMod
 
 def get_dataloaders(opt, same=False):
     if opt.dataset == "mpv":
         dataset_cl = MPVDataset
     elif opt.dataset == "viton":
         dataset_cl = VitonDataset
+    elif opt.dataset == "viton-hd":
+        dataset_cl = VitonDatasetHDMod
     else:
         raise NotImplementedError
     

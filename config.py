@@ -114,6 +114,11 @@ def set_dataset_default_lm(opt, parser):
         parser.set_defaults(num_res_blocks=int(math.log(opt.img_size, 2)) - 2)
         parser.set_defaults(dataroot="./data/viton")
         parser.set_defaults(patch_size=opt.img_size // 4)
+    elif opt.dataset == "viton-hd":
+        parser.set_defaults(num_epochs=100)
+        parser.set_defaults(num_res_blocks=int(math.log(opt.img_size, 2)) - 2)
+        parser.set_defaults(dataroot="./data/viton-hd")
+        parser.set_defaults(patch_size=opt.img_size // 4)
     else:
         raise NotImplementedError
 
